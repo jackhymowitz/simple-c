@@ -1,0 +1,87 @@
+#include "GrowArray.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+using namespace std;
+
+GrowArray::GrowArray()
+{
+	size=0;
+	arrayLength=0;
+}
+
+GrowArray::~GrowArray()
+{
+	free(data);
+}
+
+void GrowArray::grow()
+{
+	if(size+1>=arrayLength)
+	{
+		int** newData=malloc(arrayLength*2);
+		for(int i=0;i<size;i++)
+		{
+			&newData[i]=&data[i];
+		}
+		arrayLength*=2;
+		data=newData;
+	}
+}
+
+void GrowArray::addEnd(int x)
+{
+	grow();
+	&data[size]=x;
+	size++;
+}
+
+
+void GrowArray::insert(int pos,int x)
+{
+	grow();
+	for(int i=size;i>pos;i--)
+	{
+		&data[i]=&data[i-1];
+	}
+	&data[pos]=x;
+}
+
+void GrowArray::addStart(int x)
+{
+	insert(0,x);
+}
+
+void GrowArray::removeEnd()
+{
+	size--;
+}
+
+void GrowArray::remove(int pos)
+{
+	size--;
+	for(int i=pos;i<size;i++)
+	{
+		&data[i]=&data[i+1];
+	}
+}
+
+void GrowArray::removeStart()
+{
+	remove(0);
+}
+
+int GrowArray::get(int pos)
+{
+	return &data[pos];
+}
+
+void GrowArray::set(int pos,int val)
+{
+	&data[pos]=val;
+}
+
+int GrowArray::size()
+{
+	return size;
+}
